@@ -71,7 +71,7 @@ namespace Joels_Rom_Tools.FileFormats
         public CueFile(string data)
         {
 
-            FileField currentFile = null;
+            FileField? currentFile = null;
             var currentTrack = new TrackField();
 
             foreach (var line in data.Split(Environment.NewLine))

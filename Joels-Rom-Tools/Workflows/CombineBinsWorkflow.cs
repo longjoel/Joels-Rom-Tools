@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Joels_Rom_Tools.Workflows
 {
-    internal class CombineBinsWorkflow : IWorkflow
+    public class CombineBinsWorkflow : IWorkflow
     {
         private string _cueFilePath;
         private string _newCueFile;
@@ -22,10 +22,8 @@ namespace Joels_Rom_Tools.Workflows
 
         private IndexField FramesToIndexField(int frames)
         {
-            var fx = 0;
             int minutes = 0;
             int seconds = 0;
-
 
             int accum = frames;
 
@@ -41,7 +39,7 @@ namespace Joels_Rom_Tools.Workflows
                 seconds++;
             }
 
-            fx = accum;
+            int fx = accum;
 
             return new IndexField
             {
@@ -65,20 +63,23 @@ namespace Joels_Rom_Tools.Workflows
 
                 var cueFolder = Path.GetDirectoryName(_cueFilePath);
 
-                var bins = Directory.GetFiles(cueFolder).OrderBy(x => x).Where(x => x != _newBinFile).ToList();
+                if (cueFolder != null)
+                {
+
+                    var bins = Directory.GetFiles(cueFolder).OrderBy(x => x).Where(x => x != _newBinFile).ToList();
 
 
-                var newBinStream = File.Create(_newBinFile);
+                    var newBinStream = File.Create(_newBinFile);
 
-                onProgressUpdate?.Invoke(new WorkflowProgressUpdate("", 0));
+                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate("", 0));
 
-                var firstBin = bins[0];
-                byte[] bits = File.ReadAllBytes(firstBin);
-                onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Read {bits.Length}", 100 * count / bins.Count));
-                newBinStream.Write(bits, 0, bits.Length);
-                onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Wrote {bits.Length}", 100 * count / bins.Count));
+                    var firstBin = bins[0];
+                    byte[] bits = File.ReadAllBytes(firstBin);
+                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Read {bits.Length}", 100 * count / bins.Count));
+                    newBinStream.Write(bits, 0, bits.Length);
+                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Wrote {bits.Length}", 100 * count / bins.Count));
 
-                var newTracks = new List<TrackField>{ new TrackField {
+                    var newTracks = new List<TrackField>{ new TrackField {
                             TrackIndex="01",
                             Mode= "MODE2/2352",
                             IndexFields =new List<IndexField> {
@@ -88,46 +89,47 @@ namespace Joels_Rom_Tools.Workflows
                                     Seconds="00"  } } } };
 
 
-                for (int i = 1; i < bins.Count; i++)
+                    for (int i = 1; i < bins.Count; i++)
 
-                {
-                    runningFrames += (bits.Length / (2352 ));
-                    var bin = bins[i];
-                    bits = File.ReadAllBytes(bin);
-                    var tx = new TrackField
                     {
-                        TrackIndex = (i + 1).ToString("00"),
-                        Mode = "AUDIO",
-                        IndexFields = new List<IndexField> {
+                        runningFrames += (bits.Length / (2352));
+                        var bin = bins[i];
+                        bits = File.ReadAllBytes(bin);
+                        var tx = new TrackField
+                        {
+                            TrackIndex = (i + 1).ToString("00"),
+                            Mode = "AUDIO",
+                            IndexFields = new List<IndexField> {
                             FramesToIndexField(runningFrames)
                         }
-                    };
-                    newTracks.Add(tx);
-                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Read {bits.Length}", 100 * count / bins.Count));
-                    newBinStream.Write(bits, 0, bits.Length);
-                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Wrote {bits.Length}", 100 * count / bins.Count));
-                    count++;
+                        };
+                        newTracks.Add(tx);
+                        onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Read {bits.Length}", 100 * count / bins.Count));
+                        newBinStream.Write(bits, 0, bits.Length);
+                        onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Wrote {bits.Length}", 100 * count / bins.Count));
+                        count++;
 
-                }
+                    }
 
-                newBinStream.Close();
+                    newBinStream.Close();
 
-                var newCF = new CueFile()
-                {
-                    Fields = new List<FileField>{ new FileField {
+                    var newCF = new CueFile()
+                    {
+                        Fields = new List<FileField>{ new FileField {
                         FileName = "\""+_newBinFile+"\"",
                         Type = originalCF.Fields[0].Type,
                         Tracks =newTracks
                         }
                     }
-                };
+                    };
 
-                File.WriteAllText(_newCueFile, newCF.ToString());
+                    File.WriteAllText(_newCueFile, newCF.ToString());
 
-                onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Done.", 100));
+                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Done.", 100));
 
 
-                onWorkflowComplete?.Invoke();
+                    onWorkflowComplete?.Invoke();
+                }
             });
         }
     }
