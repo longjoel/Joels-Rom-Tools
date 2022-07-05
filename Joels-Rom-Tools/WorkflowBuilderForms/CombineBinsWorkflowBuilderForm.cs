@@ -63,16 +63,6 @@ namespace Joels_Rom_Tools.WorkflowBuilderForms
         }
 
 
-
-        private void CueLocationButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BinLocationButton_Click(object sender, EventArgs e)
-        {
-
-        }
         private void MoveSelectedUpButton_Click(object sender, EventArgs e)
         {
             SelectedBinsListBox.MoveSelectedItemUp();
@@ -123,7 +113,7 @@ namespace Joels_Rom_Tools.WorkflowBuilderForms
                     {
                         SelectedBinsListBox.Items.Clear();
 
-                        var binFiles = new List<string>();
+                      
 
                         var cueFile = new FileFormats.CueFile(File.ReadAllText(fd.FileName));
 
@@ -141,6 +131,47 @@ namespace Joels_Rom_Tools.WorkflowBuilderForms
                     }
 
                 }
+            }
+        }
+
+        private void SelectedBinsListBox_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e != null && e.Data != null)
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+
+                if (files.Length > 0)
+                {
+                    var folderName = Path.GetDirectoryName(files.First());
+                    if (folderName != null && folderName.Length > 0)
+                    {
+                        SelectedBinsListBox.Items.Clear();
+                        foreach (var f in files)
+                        {
+                            SelectedBinsListBox.Items.Add(new { Text = Path.GetFileName(f), Value = f });
+                        }
+
+
+                        var last = folderName.Split(Path.DirectorySeparatorChar).Last();
+
+                        CueLocationTxt.Text = Path.Join(folderName, last + ".cue");
+                        BinLocationTxt.Text = Path.Join(folderName, last + ".bin");
+                    }
+
+                }
+            }
+        }
+
+        private void SelectedBinsListBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (e?.Data?.GetDataPresent(DataFormats.FileDrop) ?? false)
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+            else
+            {
+                if (e != null) { e.Effect = DragDropEffects.None; }
             }
         }
     }

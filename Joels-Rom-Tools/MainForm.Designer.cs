@@ -31,6 +31,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.LogTextBox = new System.Windows.Forms.TextBox();
             this.WorkflowsContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.WorkflowProgress = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -38,26 +39,30 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.LogTextBox, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.WorkflowsContainer, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.WorkflowProgress, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1206, 807);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // LogTextBox
             // 
             this.LogTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LogTextBox.Location = new System.Drawing.Point(3, 510);
+            this.LogTextBox.Location = new System.Drawing.Point(3, 490);
             this.LogTextBox.Multiline = true;
             this.LogTextBox.Name = "LogTextBox";
+            this.LogTextBox.ReadOnly = true;
+            this.LogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.LogTextBox.Size = new System.Drawing.Size(1200, 294);
             this.LogTextBox.TabIndex = 0;
+            this.LogTextBox.TextChanged += new System.EventHandler(this.LogTextBox_TextChanged);
             // 
             // WorkflowsContainer
             // 
@@ -66,8 +71,16 @@
             this.WorkflowsContainer.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.WorkflowsContainer.Location = new System.Drawing.Point(3, 3);
             this.WorkflowsContainer.Name = "WorkflowsContainer";
-            this.WorkflowsContainer.Size = new System.Drawing.Size(1200, 501);
+            this.WorkflowsContainer.Size = new System.Drawing.Size(1200, 481);
             this.WorkflowsContainer.TabIndex = 1;
+            // 
+            // WorkflowProgress
+            // 
+            this.WorkflowProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WorkflowProgress.Location = new System.Drawing.Point(3, 790);
+            this.WorkflowProgress.Name = "WorkflowProgress";
+            this.WorkflowProgress.Size = new System.Drawing.Size(1200, 14);
+            this.WorkflowProgress.TabIndex = 2;
             // 
             // MainForm
             // 
@@ -89,5 +102,6 @@
         private TableLayoutPanel tableLayoutPanel1;
         private TextBox LogTextBox;
         private FlowLayoutPanel WorkflowsContainer;
+        private ProgressBar WorkflowProgress;
     }
 }

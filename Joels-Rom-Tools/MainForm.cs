@@ -11,18 +11,19 @@ namespace Joels_Rom_Tools
             InitializeComponent();
         }
 
-        private Button MakeWorkflowButton(string name, string description, Action onClick) {
+        private Button MakeWorkflowButton(string name, string description, Action onClick)
+        {
             var btn = new Button();
             btn.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             btn.AutoSize = true;
             btn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btn.Text = $"{name}: {description}";
-            btn.Click += (o,e)=>onClick();
+            btn.Click += (o, e) => onClick();
 
             return btn;
         }
 
-       
+
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -31,8 +32,10 @@ namespace Joels_Rom_Tools
             {
                 var asmTypes = asm.GetExportedTypes();
                 var workflows = new List<Type> { };
-                foreach (var t in asmTypes) {
-                    if (t.GetInterfaces().Any(x => x.Name.StartsWith("IWorkflowBuilder"))) {
+                foreach (var t in asmTypes)
+                {
+                    if (t.GetInterfaces().Any(x => x.Name.StartsWith("IWorkflowBuilder")))
+                    {
                         workflows.Add(t);
                     }
                 }
@@ -47,30 +50,54 @@ namespace Joels_Rom_Tools
                             if (attr != null)
                             {
                                 LogTextBox.Text += $"{attr.Name}: {attr.Description} {Environment.NewLine}";
-                                WorkflowsContainer.Controls.Add(MakeWorkflowButton(attr.Name, attr.Description, () => {
+                                WorkflowsContainer.Controls.Add(MakeWorkflowButton(attr.Name, attr.Description, () =>
+                                {
 
                                     var instance = Activator.CreateInstance(w) as dynamic;
-                                    if (instance != null) {
-                                        instance.ShowDialog();
-                                        var workflow = instance.Result as IWorkflow;
-                                        if (workflow != null) {
-                                            Task.Factory.StartNew(async () =>
+                                    if (instance != null)
+                                    {
+                                        var formInstance = (instance as Form);
+                                        if (formInstance != null)
+                                        {
+                                            formInstance.FormClosed += (o, e) =>
                                             {
-
-                                                await workflow.StartAsync((WorkflowProgressUpdate x) =>
+                                                var workflow = instance.Result as IWorkflow;
+                                                if (workflow != null)
                                                 {
-                                                    Invoke(() => { LogTextBox.Text += $"{x.Progress} || {x.Message} {Environment.NewLine}"; });
-                                                }, () =>
-                                                {
-                                                    MessageBox.Show("Done!");
-                                                },
-                                                (m, ex) => {
-                                                    Invoke(() => { LogTextBox.Text += $"{m} || {ex.Message} {Environment.NewLine}"; });
+                                                    Task.Factory.StartNew(async () =>
+                                                    {
 
-                                                });
-                                                
-                                                
-                                            });
+                                                        await workflow.StartAsync((WorkflowProgressUpdate x) =>
+                                                        {
+                                                            Invoke(() =>
+                                                            {
+                                                                LogTextBox.Text += $"{x.Progress} || {x.Message} {Environment.NewLine}";
+                                                                WorkflowProgress.Value = x.Progress;
+                                                            });
+                                                            
+                                                        }, () =>
+                                                        {
+                                                            Invoke(() =>
+                                                            {
+                                                               
+                                                                WorkflowProgress.Value = 0;
+                                                            });
+                                                        },
+                                                        (m, ex) =>
+                                                        {
+                                                            Invoke(() =>
+                                                            {
+                                                                LogTextBox.Text += $"{m} || {ex?.Message} {Environment.NewLine}";
+                                                                WorkflowProgress.Value = 0;
+                                                            });
+
+                                                        });
+
+
+                                                    });
+                                                }
+                                            };
+                                            instance.Show();
                                         }
                                     }
                                 }));
@@ -84,6 +111,12 @@ namespace Joels_Rom_Tools
                 }
             }
 
+        }
+
+        private void LogTextBox_TextChanged(object sender, EventArgs e)
+        {
+            LogTextBox.SelectionStart = LogTextBox.TextLength; //scroll to the caret
+            LogTextBox.ScrollToCaret();
         }
     }
 }

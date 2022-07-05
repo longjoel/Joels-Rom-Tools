@@ -52,7 +52,7 @@ namespace Joels_Rom_Tools.Workflows
             };
         }
 
-        public async Task StartAsync(Action<WorkflowProgressUpdate>? onProgressUpdate, Action? onWorkflowComplete, Action<string,Exception>? onWorkflowFailed)
+        public async Task StartAsync(Action<WorkflowProgressUpdate>? onProgressUpdate, Action? onWorkflowComplete, Action<string,Exception?>? onWorkflowFailed)
         {
             await Task.Run(() =>
             {
@@ -64,6 +64,11 @@ namespace Joels_Rom_Tools.Workflows
                 var newTracks = new List<TrackField> { };
                 try
                 {
+                    if (File.Exists(_newBinFile) && new FileInfo(_newBinFile).Length > 0) {
+                        onWorkflowFailed?.Invoke($"{_newBinFile} already exists.",null);
+                        return;
+
+                    }
                     var newBinStream = File.Create(_newBinFile);
 
                     onProgressUpdate?.Invoke(new WorkflowProgressUpdate("Starting Task", 0));

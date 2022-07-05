@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Joels_Rom_Tools.Workflows
 {
-    internal class InjectSteamRomWorkflow
+    public class InjectSteamRomWorkflow
     {
     }
 }

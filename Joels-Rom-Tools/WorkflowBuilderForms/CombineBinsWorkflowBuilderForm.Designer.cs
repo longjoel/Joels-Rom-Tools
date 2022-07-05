@@ -43,10 +43,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.BinLocationTxt = new System.Windows.Forms.TextBox();
-            this.BinLocationButton = new System.Windows.Forms.Button();
-            this.CueLocationButton = new System.Windows.Forms.Button();
             this.CueLocationTxt = new System.Windows.Forms.TextBox();
             this.RemoveOriginalBinsCheckbox = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.RunTaskButton = new System.Windows.Forms.Button();
             this.CancelTaskButton = new System.Windows.Forms.Button();
@@ -163,6 +163,7 @@
             // 
             // SelectedBinsListBox
             // 
+            this.SelectedBinsListBox.AllowDrop = true;
             this.SelectedBinsListBox.DisplayMember = "Text";
             this.SelectedBinsListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SelectedBinsListBox.FormattingEnabled = true;
@@ -172,6 +173,8 @@
             this.SelectedBinsListBox.Size = new System.Drawing.Size(1087, 314);
             this.SelectedBinsListBox.TabIndex = 1;
             this.SelectedBinsListBox.ValueMember = "Text";
+            this.SelectedBinsListBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.SelectedBinsListBox_DragDrop);
+            this.SelectedBinsListBox.DragOver += new System.Windows.Forms.DragEventHandler(this.SelectedBinsListBox_DragOver);
             // 
             // tableLayoutPanel3
             // 
@@ -230,10 +233,10 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.15371F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.8463F));
             this.tableLayoutPanel4.Controls.Add(this.BinLocationTxt, 1, 1);
-            this.tableLayoutPanel4.Controls.Add(this.BinLocationButton, 0, 1);
-            this.tableLayoutPanel4.Controls.Add(this.CueLocationButton, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.CueLocationTxt, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.RemoveOriginalBinsCheckbox, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.label6, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.label7, 0, 1);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 491);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -251,28 +254,6 @@
             this.BinLocationTxt.Name = "BinLocationTxt";
             this.BinLocationTxt.Size = new System.Drawing.Size(823, 31);
             this.BinLocationTxt.TabIndex = 3;
-            // 
-            // BinLocationButton
-            // 
-            this.BinLocationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.BinLocationButton.Location = new System.Drawing.Point(3, 80);
-            this.BinLocationButton.Name = "BinLocationButton";
-            this.BinLocationButton.Size = new System.Drawing.Size(258, 34);
-            this.BinLocationButton.TabIndex = 2;
-            this.BinLocationButton.Text = "Bin file location";
-            this.BinLocationButton.UseVisualStyleBackColor = true;
-            this.BinLocationButton.Click += new System.EventHandler(this.BinLocationButton_Click);
-            // 
-            // CueLocationButton
-            // 
-            this.CueLocationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.CueLocationButton.Location = new System.Drawing.Point(3, 15);
-            this.CueLocationButton.Name = "CueLocationButton";
-            this.CueLocationButton.Size = new System.Drawing.Size(258, 34);
-            this.CueLocationButton.TabIndex = 0;
-            this.CueLocationButton.Text = "Cue file location";
-            this.CueLocationButton.UseVisualStyleBackColor = true;
-            this.CueLocationButton.Click += new System.EventHandler(this.CueLocationButton_Click);
             // 
             // CueLocationTxt
             // 
@@ -293,6 +274,26 @@
             this.RemoveOriginalBinsCheckbox.TabIndex = 4;
             this.RemoveOriginalBinsCheckbox.Text = "Remove original bins?";
             this.RemoveOriginalBinsCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(123, 20);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(138, 25);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Cue file location";
+            // 
+            // label7
+            // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(129, 85);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(132, 25);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "Bin file location";
             // 
             // flowLayoutPanel2
             // 
@@ -374,8 +375,6 @@
         private Label label4;
         private TableLayoutPanel tableLayoutPanel4;
         private TextBox BinLocationTxt;
-        private Button BinLocationButton;
-        private Button CueLocationButton;
         private TextBox CueLocationTxt;
         private CheckBox RemoveOriginalBinsCheckbox;
         private FlowLayoutPanel flowLayoutPanel2;
@@ -383,5 +382,7 @@
         private Button CancelTaskButton;
         private Button PickCueFileButton;
         private Label label5;
+        private Label label6;
+        private Label label7;
     }
 }
