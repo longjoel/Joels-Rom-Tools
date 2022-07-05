@@ -6,5 +6,22 @@ namespace Joels_Rom_Tools
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            var formBuilder = new WorkflowBuilderForms.CombineBinsWorkflowBuilderForm();
+            formBuilder.ShowDialog();
+            var workFlow = formBuilder.Result;
+
+            if (workFlow != null) {
+                Task.Factory.StartNew(async () => {
+                    await workFlow.StartAsync((x) => {
+                        Invoke(() => { LogTextBox.Text += $"{x.Progress} || {x.Message} {Environment.NewLine}"; });
+                    }, () => {
+                        MessageBox.Show("Done!");
+                    });
+                });
+            }
+        }
     }
 }
