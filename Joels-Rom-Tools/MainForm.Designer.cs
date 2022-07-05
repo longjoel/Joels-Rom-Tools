@@ -30,6 +30,7 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.LogTextBox = new System.Windows.Forms.TextBox();
+            this.WorkflowsContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,6 +40,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.LogTextBox, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.WorkflowsContainer, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -57,6 +59,16 @@
             this.LogTextBox.Size = new System.Drawing.Size(1200, 294);
             this.LogTextBox.TabIndex = 0;
             // 
+            // WorkflowsContainer
+            // 
+            this.WorkflowsContainer.AutoScroll = true;
+            this.WorkflowsContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WorkflowsContainer.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.WorkflowsContainer.Location = new System.Drawing.Point(3, 3);
+            this.WorkflowsContainer.Name = "WorkflowsContainer";
+            this.WorkflowsContainer.Size = new System.Drawing.Size(1200, 501);
+            this.WorkflowsContainer.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -64,7 +76,7 @@
             this.ClientSize = new System.Drawing.Size(1206, 807);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Joel\'s Rom Tools";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -76,5 +88,6 @@
 
         private TableLayoutPanel tableLayoutPanel1;
         private TextBox LogTextBox;
+        private FlowLayoutPanel WorkflowsContainer;
     }
 }

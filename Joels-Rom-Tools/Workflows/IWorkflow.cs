@@ -20,7 +20,8 @@ namespace Joels_Rom_Tools.Workflows
     {
         Task StartAsync(
             Action<WorkflowProgressUpdate> onProgressUpdate,
-            Action onWorkflowComplete);
+            Action onWorkflowComplete,
+            Action<string, Exception> onWorkflowFailed);
 
 
         

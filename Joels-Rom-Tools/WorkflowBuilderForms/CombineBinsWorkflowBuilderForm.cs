@@ -11,6 +11,8 @@ using System.Windows.Forms;
 
 namespace Joels_Rom_Tools.WorkflowBuilderForms
 {
+   
+    [Attributes.WorkflowBuilderInfo("Combine Bins", "Combine multiple binaries into a single bin with multi-trac cue file.")]
     public partial class CombineBinsWorkflowBuilderForm : Form, IWorkflowBuilder<Workflows.CombineBinsWorkflow>
     {
         public CombineBinsWorkflowBuilderForm()
