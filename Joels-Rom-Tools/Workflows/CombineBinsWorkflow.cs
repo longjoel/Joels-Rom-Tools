@@ -9,15 +9,17 @@ namespace Joels_Rom_Tools.Workflows
 {
     public class CombineBinsWorkflow : IWorkflow
     {
-        private string _cueFilePath;
+        private List<string> _binPaths;
         private string _newCueFile;
         private string _newBinFile;
+        private bool _rmOldFiles;
 
-        public CombineBinsWorkflow(string cueFilePath, string newCueFile, string newBinFile)
+        public CombineBinsWorkflow(List<string> binFilePaths, string newCueFile, string newBinFile, bool rmOldFiles)
         {
-            _cueFilePath = cueFilePath;
+            _binPaths = binFilePaths;
             _newCueFile = newCueFile;
             _newBinFile = newBinFile;
+            _rmOldFiles = rmOldFiles;
         }
 
         private IndexField FramesToIndexField(int frames)
@@ -50,7 +52,7 @@ namespace Joels_Rom_Tools.Workflows
             };
         }
 
-        public async Task StartAsync(Action<WorkflowProgressUpdate>? onProgressUpdate, Action? onWorkflowComplete)
+        public async Task StartAsync(Action<WorkflowProgressUpdate>? onProgressUpdate, Action? onWorkflowComplete, Action<string,Exception?>? onWorkflowFailed)
         {
             await Task.Run(() =>
             {
@@ -58,20 +60,18 @@ namespace Joels_Rom_Tools.Workflows
                 // step 1 -- build out the cue file.
                 int count = 1;
                 int runningFrames = 0;
-
-                var originalCF = new CueFile(File.ReadAllText(_cueFilePath));
-
-                var cueFolder = Path.GetDirectoryName(_cueFilePath);
-
-                if (cueFolder != null)
+                var bins = _binPaths;
+                var newTracks = new List<TrackField> { };
+                try
                 {
+                    if (File.Exists(_newBinFile) && new FileInfo(_newBinFile).Length > 0) {
+                        onWorkflowFailed?.Invoke($"{_newBinFile} already exists.",null);
+                        return;
 
-                    var bins = Directory.GetFiles(cueFolder).OrderBy(x => x).Where(x => x != _newBinFile).ToList();
-
-
+                    }
                     var newBinStream = File.Create(_newBinFile);
 
-                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate("", 0));
+                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate("Starting Task", 0));
 
                     var firstBin = bins[0];
                     byte[] bits = File.ReadAllBytes(firstBin);
@@ -79,7 +79,7 @@ namespace Joels_Rom_Tools.Workflows
                     newBinStream.Write(bits, 0, bits.Length);
                     onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Wrote {bits.Length}", 100 * count / bins.Count));
 
-                    var newTracks = new List<TrackField>{ new TrackField {
+                    newTracks = new List<TrackField>{ new TrackField {
                             TrackIndex="01",
                             Mode= "MODE2/2352",
                             IndexFields =new List<IndexField> {
@@ -112,24 +112,46 @@ namespace Joels_Rom_Tools.Workflows
                     }
 
                     newBinStream.Close();
+                }
+                catch (Exception ex){
+                    onWorkflowFailed?.Invoke($"Unable to write {_newBinFile}", ex);
+                    return;
 
-                    var newCF = new CueFile()
-                    {
-                        Fields = new List<FileField>{ new FileField {
+                }
+
+                var newCF = new CueFile()
+                {
+                    Fields = new List<FileField>{ new FileField {
                         FileName = "\""+_newBinFile+"\"",
-                        Type = originalCF.Fields[0].Type,
+                        Type = "BINARY",
                         Tracks =newTracks
                         }
                     }
-                    };
+                };
 
-                    File.WriteAllText(_newCueFile, newCF.ToString());
+                File.WriteAllText(_newCueFile, newCF.ToString());
 
-                    onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Done.", 100));
+                if (_rmOldFiles)
+                {
+                    try
+                    {
+                        onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Removing old bins", 100));
+                        foreach (var b in bins)
+                        {
 
-
-                    onWorkflowComplete?.Invoke();
+                            File.Delete(b);
+                        }
+                    }
+                    catch (Exception ex) {
+                        onWorkflowFailed?.Invoke($"Unable to remove old bins.", ex);
+                        return;
+                    }
                 }
+                onProgressUpdate?.Invoke(new WorkflowProgressUpdate($"Done.", 100));
+
+
+                onWorkflowComplete?.Invoke();
+
             });
         }
     }

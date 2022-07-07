@@ -15,7 +15,7 @@ namespace Joels_Rom_Tools.Workflows
         public DemoWorkflow(string exampleParam1) {
             _exampleParam1 = exampleParam1;
         }
-        public Task StartAsync(Action<WorkflowProgressUpdate> onProgressUpdate, Action onWorkflowComplete)
+        public Task StartAsync(Action<WorkflowProgressUpdate> onProgressUpdate, Action onWorkflowComplete, Action<string, Exception?> onError)
         {
             throw new NotImplementedException();
         }
