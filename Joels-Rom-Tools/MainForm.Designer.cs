@@ -49,18 +49,19 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1206, 807);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1433, 898);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // LogTextBox
             // 
+            this.LogTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LogTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LogTextBox.Location = new System.Drawing.Point(3, 490);
+            this.LogTextBox.Location = new System.Drawing.Point(3, 581);
             this.LogTextBox.Multiline = true;
             this.LogTextBox.Name = "LogTextBox";
             this.LogTextBox.ReadOnly = true;
             this.LogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.LogTextBox.Size = new System.Drawing.Size(1200, 294);
+            this.LogTextBox.Size = new System.Drawing.Size(1427, 294);
             this.LogTextBox.TabIndex = 0;
             this.LogTextBox.TextChanged += new System.EventHandler(this.LogTextBox_TextChanged);
             // 
@@ -71,22 +72,22 @@
             this.WorkflowsContainer.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.WorkflowsContainer.Location = new System.Drawing.Point(3, 3);
             this.WorkflowsContainer.Name = "WorkflowsContainer";
-            this.WorkflowsContainer.Size = new System.Drawing.Size(1200, 481);
+            this.WorkflowsContainer.Size = new System.Drawing.Size(1427, 572);
             this.WorkflowsContainer.TabIndex = 1;
             // 
             // WorkflowProgress
             // 
             this.WorkflowProgress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.WorkflowProgress.Location = new System.Drawing.Point(3, 790);
+            this.WorkflowProgress.Location = new System.Drawing.Point(3, 881);
             this.WorkflowProgress.Name = "WorkflowProgress";
-            this.WorkflowProgress.Size = new System.Drawing.Size(1200, 14);
+            this.WorkflowProgress.Size = new System.Drawing.Size(1427, 14);
             this.WorkflowProgress.TabIndex = 2;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1206, 807);
+            this.ClientSize = new System.Drawing.Size(1433, 898);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainForm";
             this.Text = "Joel\'s Rom Tools";
